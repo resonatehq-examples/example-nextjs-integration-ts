@@ -1,1 +1,0 @@
-self.__RSC_SERVER_MANIFEST="{\"node\":{\"40cab8cb4ac51c0ceeea6d75319faf1bc23ba3a12d\":{\"workers\":{\"app/page\":{\"moduleId\":\"47483\",\"async\":false}},\"layer\":{\"app/page\":\"action-browser\"},\"filename\":\"app/actions.ts\",\"exportedName\":\"submitReport\"}},\"edge\":{},\"encryptionKey\":\"process.env.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY\"}"
