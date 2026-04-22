@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/banner.png" alt="Next.js Integration — Resonate example" />
+</p>
+
 # Next.js + Resonate Integration
 
 Durable background workflows from Next.js Server Actions — powered by Resonate.
