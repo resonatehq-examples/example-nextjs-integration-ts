@@ -50,9 +50,7 @@ export async function GET(req, { params }) {
 }
 ```
 
-**Compare to Trigger.dev:** Trigger.dev requires a dedicated `/trigger` directory, running `trigger.dev dev` alongside your app, and defining tasks with `task({ id, run })`. With Resonate, there's no separate process — call `resonate.run()` from any Server Action.
-
-**Compare to Inngest:** Inngest requires mounting a `serve()` handler at `/api/inngest`, defining functions with `inngest.createFunction()`, and emitting events with `inngest.send()`. With Resonate, there's no event schema and no serve endpoint — call `resonate.run()` directly.
+A Server Action calls `resonate.run()` with an explicit workflow ID. A status route resolves the same ID via `resonate.get()` and polls for completion. No separate process, no event-bus handler mount, no out-of-band task registry — the workflow lives in the same Next.js app.
 
 ## Important: explicit function names
 
@@ -131,15 +129,11 @@ lib/
   workflow.ts           — 4-step report generation workflow
 ```
 
-## Compared to Trigger.dev and Inngest
+## Why this shape fits Next.js
 
-| | Trigger.dev | Inngest | Resonate |
-|---|-------------|---------|----------|
-| **Define workflow** | `task({ id, run })` in `/trigger/` | `inngest.createFunction()` | Generator function anywhere |
-| **Trigger from action** | `tasks.trigger("id", data)` | `inngest.send({ name, data })` | `resonate.run("id", fn, args)` |
-| **Separate process** | Yes — `trigger.dev dev` | No (HTTP-based) | No — runs embedded |
-| **Event schema** | Optional but encouraged | Required (named events) | None — just call the function |
-| **Status polling** | Via run ID from API | Via run ID from API | Via promise ID from `resonate.get()` |
-| **External service** | Trigger.dev platform | Inngest cloud/self-hosted | Embedded or Resonate server |
+- **No event schema.** Server Actions invoke workflows by function reference. No `.send({ name, data })` boundary to define and maintain.
+- **No separate process.** `Resonate.local()` runs the durability layer in-process. The same `next dev` command that serves the app runs the workflows.
+- **Workflow ID = durable promise ID.** `resonate.run(id, ...)` returns a handle; any route can recover the same handle via `resonate.get(id)` and poll for completion.
+- **The workflow code is a generator.** No task-registry file, no decorator, no boilerplate. Define it anywhere; register once.
 
 [Try Resonate →](https://resonatehq.io) · [Resonate SDK →](https://github.com/resonatehq/resonate-sdk-ts)
